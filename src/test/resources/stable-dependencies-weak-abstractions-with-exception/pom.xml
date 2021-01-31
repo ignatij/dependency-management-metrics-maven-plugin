@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>mk.jax.test</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.1</version>
+
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>module1</module>
+        <module>module2</module>
+        <module>module3</module>
+        <module>module4</module>
+        <module>module5</module>
+        <module>module6</module>
+        <module>module7</module>
+        <module>module8</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>mk.jax</groupId>
+                <artifactId>dependency-management-metrics-maven-plugin</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <failOnViolation>true</failOnViolation>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

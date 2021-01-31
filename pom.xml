@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>mk.jax</groupId>
+    <artifactId>dependency-management-metrics-maven-plugin</artifactId>
+    <packaging>maven-plugin</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>Dependency Management Metrics Maven Plugin</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <maven.version>3.6.3</maven.version>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>${maven.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.6.0</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version>${maven.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-artifact</artifactId>
+            <version>${maven.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-compat</artifactId>
+            <version>${maven.version}</version>
+        </dependency>
+
+        <!--Testing-->
+        <dependency>
+            <groupId>org.apache.maven.plugin-testing</groupId>
+            <artifactId>maven-plugin-testing-harness</artifactId>
+            <version>3.3.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.7.0</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <id>default-descriptor</id>
+                        <phase>process-classes</phase>
+                    </execution>
+                    <!-- if you want to generate help goal -->
+                    <execution>
+                        <id>help-goal</id>
+                        <goals>
+                            <goal>helpmojo</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+    </build>
+
+
+</project>
