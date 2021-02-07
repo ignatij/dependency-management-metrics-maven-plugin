@@ -34,6 +34,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <outputFile>./target/metrics/dependency-metrics-result.txt</outputFile>
+                </configuration>
             </plugin>
         </plugins>
     </build>

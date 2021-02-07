@@ -22,10 +22,12 @@ public class MetricsFileWriter implements MetricsWriter {
     @Override
     public void write(List<Point> points, File outputFile) throws MojoExecutionException {
         if (!outputFile.exists()) {
+            File parent = new File(outputFile.getParent());
+            parent.mkdirs();
             try {
                 outputFile.createNewFile();
             } catch (IOException e) {
-                throw new MojoExecutionException("Cannot create file: " + outputFile.getAbsolutePath(), e);
+                throw new MojoExecutionException("Unable to create result file: " + outputFile.getAbsolutePath(), e);
             }
         }
         try (FileWriter writer = new FileWriter(outputFile, false)) {
@@ -44,7 +46,7 @@ public class MetricsFileWriter implements MetricsWriter {
 
     private void writeComponentInfo(List<Point> points, FileWriter writer) throws IOException {
         writer.write(String.format(OUTPUT_FORMAT, "COMPONENT", "INSTABILITY", "ABSTRACTION", "DISTANCE FROM MAIN SEQUENCE"));
-        for(int i = 0; i < 120; i++) {
+        for (int i = 0; i < 120; i++) {
             writer.write("=");
         }
         writer.write("\n\n");
