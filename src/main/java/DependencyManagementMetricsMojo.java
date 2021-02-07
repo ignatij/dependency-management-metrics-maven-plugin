@@ -6,12 +6,19 @@ import org.apache.maven.project.*;
 import stable_abstractions.StableAbstractionsChecker;
 import stable_dependencies.StableDependenciesChecker;
 import statistic.Point;
-import statistic.StatisticUtil;
+import violation.ViolationChecker;
+import violation.exception.StableAbstractionsPrincipleViolation;
+import violation.exception.StableDependenciesPrincipleViolation;
+import writer.MetricsFileWriter;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static stable_abstractions.StableAbstractionsChecker.STABLE_ABSTRACTIONS_VIOLATION;
+import static stable_dependencies.StableDependenciesChecker.STABLE_DEPENDENCIES_VIOLATION;
 
 @Mojo(name = "check", defaultPhase = LifecyclePhase.COMPILE, requiresDependencyResolution = ResolutionScope.RUNTIME)
 public class DependencyManagementMetricsMojo extends AbstractMojo {
@@ -25,6 +32,9 @@ public class DependencyManagementMetricsMojo extends AbstractMojo {
     @Parameter(defaultValue = "${failOnViolation}", readonly = true)
     private Boolean failOnViolation = false;
 
+    @Parameter(property = "output.file", defaultValue = "${project.build.directory}/dependency-metrics-result.txt", readonly = true)
+    private File outputFile;
+
     @Component
     private ProjectBuilder projectBuilder;
 
@@ -33,17 +43,21 @@ public class DependencyManagementMetricsMojo extends AbstractMojo {
         try {
             if (!project.getModules().isEmpty()) {
                 final Map<MavenProject, List<String>> projectGraph = ProjectUtil.createProjectGraph(buildingRequest, projectBuilder, project);
-                final Map<MavenProject, Double> instabilityPerComponent = new StableDependenciesChecker(projectGraph, failOnViolation).checkDependencies();
-                final Map<MavenProject, Double> abstractionPerComponent = new StableAbstractionsChecker(projectGraph, failOnViolation).calculateAbstractionLevel();
+                final Map<MavenProject, Double> instabilityPerComponent = new StableDependenciesChecker(projectGraph).checkDependencies();
+                final Map<MavenProject, Double> abstractionPerComponent = new StableAbstractionsChecker(projectGraph).calculateAbstractionLevel();
 
                 List<Point> points = new ArrayList<>();
                 for (MavenProject project : projectGraph.keySet()) {
-                    System.out.println(project.getName() + " " + instabilityPerComponent.get(project) + ", " + abstractionPerComponent.get(project));
-                    points.add(new Point(instabilityPerComponent.get(project), abstractionPerComponent.get(project)));
+                    points.add(new Point(project.getName(), instabilityPerComponent.get(project), abstractionPerComponent.get(project)));
                 }
-                System.out.println("MEAN: " + StatisticUtil.mean(points));
-                System.out.println("VARIANCE: " + StatisticUtil.variance(points));
-                System.out.println("STANDARD DEVIATION: " + StatisticUtil.standardDeviation(points));
+                new MetricsFileWriter(getLog()).write(points, outputFile);
+                if (failOnViolation) {
+                    new ViolationChecker(StableDependenciesPrincipleViolation.class).check(projectGraph, instabilityPerComponent, STABLE_DEPENDENCIES_VIOLATION);
+                    new ViolationChecker(StableAbstractionsPrincipleViolation.class).check(projectGraph,
+                            abstractionPerComponent,
+                            STABLE_ABSTRACTIONS_VIOLATION
+                    );
+                }
             }
         } catch (ProjectBuildingException e) {
             throw new MojoExecutionException("Error while building project", e);

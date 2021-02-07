@@ -1,3 +1,3 @@
-public class Test3 {
+public interface Test3 {
 
 }

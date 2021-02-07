@@ -1,9 +1,6 @@
 package stable_abstractions;
 
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
-import violation.ViolationChecker;
-import violation.exception.StableAbstractionsPrincipleViolation;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +15,7 @@ public class StableAbstractionsChecker {
     private static final String INTERFACE_JAVA_KEYWORD = "interface";
 
 
-    private static final BiFunction<Double, Double, Boolean> STABLE_ABSTRACTIONS_VIOLATION =
+    public static final BiFunction<Double, Double, Boolean> STABLE_ABSTRACTIONS_VIOLATION =
             (outerComponentMetric, innerComponentMetric) -> Double.compare(outerComponentMetric, innerComponentMetric) > 0;
 
     private final Map<MavenProject, List<String>> projectGraph;
@@ -26,24 +23,15 @@ public class StableAbstractionsChecker {
     private Long abstractFiles = 0L;
     private Long regularFiles = 0L;
 
-    private final Boolean failOnViolation;
-
-    public StableAbstractionsChecker(Map<MavenProject, List<String>> projectGraph, boolean failOnViolation) {
+    public StableAbstractionsChecker(Map<MavenProject, List<String>> projectGraph) {
         this.projectGraph = projectGraph;
-        this.failOnViolation = failOnViolation;
     }
 
-    public Map<MavenProject, Double> calculateAbstractionLevel() throws IOException, MojoExecutionException {
+    public Map<MavenProject, Double> calculateAbstractionLevel() throws IOException {
         Map<MavenProject, Double> abstractionLevel = new LinkedHashMap<>();
         for (MavenProject mavenProject : projectGraph.keySet()) {
             double abstraction = calculateAbstractionLevel(mavenProject);
             abstractionLevel.put(mavenProject, abstraction);
-        }
-        if (failOnViolation) {
-            new ViolationChecker(StableAbstractionsPrincipleViolation.class).check(projectGraph,
-                    abstractionLevel,
-                    STABLE_ABSTRACTIONS_VIOLATION
-            );
         }
         return abstractionLevel;
     }
@@ -55,7 +43,7 @@ public class StableAbstractionsChecker {
         for (String sourceDirectory : sourceDirectories) {
             calculate(new File(sourceDirectory));
         }
-        if(abstractFiles.equals(regularFiles) && abstractFiles.equals(0L)) {
+        if (abstractFiles.equals(regularFiles) && abstractFiles.equals(0L)) {
             // not a Java project
             return (double) 0;
         }
