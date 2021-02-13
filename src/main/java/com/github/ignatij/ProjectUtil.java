@@ -1,3 +1,5 @@
+package com.github.ignatij;
+
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuilder;
@@ -11,14 +13,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ProjectUtil {
+class ProjectUtil {
 
     private ProjectUtil() {
     }
 
     private static final String POM_FILE_NAME = "pom.xml";
 
-    public static Map<MavenProject, List<String>> createProjectGraph(ProjectBuildingRequest buildingRequest,
+    static Map<MavenProject, List<String>> createProjectGraph(ProjectBuildingRequest buildingRequest,
                                                                      ProjectBuilder projectBuilder,
                                                                      MavenProject project) throws ProjectBuildingException {
         Map<MavenProject, List<String>> projectGraph = new LinkedHashMap<>();

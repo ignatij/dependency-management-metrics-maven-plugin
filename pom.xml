@@ -4,13 +4,37 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>mk.jax</groupId>
+    <groupId>com.github.ignatij</groupId>
     <artifactId>dependency-management-metrics-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
     <name>Dependency Management Metrics Maven Plugin</name>
     <url>http://maven.apache.org</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/ignatij/dependency-management-metrics-maven-plugin.git</url>
+        <connection>scm:git:git://github.com/ignatij/dependency-management-metrics-maven-plugin.git</connection>
+        <developerConnection>scm:git:ssh://github.com/ignatij/dependency-management-metrics-maven-plugin.git
+        </developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Ignatij Gichevski</name>
+            <email>ignatij.gichevski@gmail.com</email>
+            <organization>Open Source Community</organization>
+            <organizationUrl>https://github.com/ignatij</organizationUrl>
+        </developer>
+    </developers>
 
     <properties>
         <maven.version>3.6.3</maven.version>
@@ -60,7 +84,6 @@
             <version>5.7.0</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -84,7 +107,6 @@
                 </executions>
             </plugin>
         </plugins>
-
     </build>
 
 

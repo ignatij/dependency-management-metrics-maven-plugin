@@ -1,4 +1,4 @@
-package statistic;
+package com.github.ignatij.statistic;
 
 import java.util.List;
 

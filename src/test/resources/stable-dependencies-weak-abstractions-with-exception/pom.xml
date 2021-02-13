@@ -23,7 +23,7 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>mk.jax</groupId>
+                <groupId>com.github.ignatij</groupId>
                 <artifactId>dependency-management-metrics-maven-plugin</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
                 <inherited>false</inherited>

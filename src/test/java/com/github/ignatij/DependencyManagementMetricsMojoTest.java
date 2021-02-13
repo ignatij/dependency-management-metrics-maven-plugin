@@ -1,3 +1,7 @@
+package com.github.ignatij;
+
+import com.github.ignatij.violation.exception.StableAbstractionsPrincipleViolation;
+import com.github.ignatij.violation.exception.StableDependenciesPrincipleViolation;
 import org.apache.maven.execution.DefaultMavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenSession;
@@ -7,8 +11,6 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuilder;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.eclipse.aether.DefaultRepositorySystemSession;
-import violation.exception.StableAbstractionsPrincipleViolation;
-import violation.exception.StableDependenciesPrincipleViolation;
 
 import java.io.File;
 

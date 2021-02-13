@@ -1,9 +1,9 @@
-package violation;
+package com.github.ignatij.violation;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
-import violation.exception.StableAbstractionsPrincipleViolation;
-import violation.exception.StableDependenciesPrincipleViolation;
+import com.github.ignatij.violation.exception.StableAbstractionsPrincipleViolation;
+import com.github.ignatij.violation.exception.StableDependenciesPrincipleViolation;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;

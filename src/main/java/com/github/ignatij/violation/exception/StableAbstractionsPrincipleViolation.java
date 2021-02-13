@@ -1,4 +1,4 @@
-package violation.exception;
+package com.github.ignatij.violation.exception;
 
 import org.apache.maven.plugin.MojoExecutionException;
 

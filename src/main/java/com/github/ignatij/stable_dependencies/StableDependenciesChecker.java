@@ -1,9 +1,7 @@
-package stable_dependencies;
+package com.github.ignatij.stable_dependencies;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
-import violation.ViolationChecker;
-import violation.exception.StableDependenciesPrincipleViolation;
 
 import java.util.List;
 import java.util.Map;
@@ -14,24 +12,17 @@ import java.util.stream.Collectors;
 public class StableDependenciesChecker {
 
 
-    private static final BiFunction<Double, Double, Boolean> STABLE_DEPENDENCIES_VIOLATION =
+    public static final BiFunction<Double, Double, Boolean> STABLE_DEPENDENCIES_VIOLATION =
             (outerMetric, innerMetric) -> Double.compare(outerMetric, innerMetric) < 0;
 
     private final Map<MavenProject, List<String>> projectGraph;
 
-    private final boolean failOnViolation;
-
-    public StableDependenciesChecker(Map<MavenProject, List<String>> projectGraph, boolean failOnViolation) {
+    public StableDependenciesChecker(Map<MavenProject, List<String>> projectGraph) {
         this.projectGraph = projectGraph;
-        this.failOnViolation = failOnViolation;
     }
 
     public Map<MavenProject, Double> checkDependencies() throws MojoExecutionException {
-        Map<MavenProject, Double> instabilityPerComponent = calculateInstability();
-        if (failOnViolation) {
-            new ViolationChecker(StableDependenciesPrincipleViolation.class).check(projectGraph, instabilityPerComponent, STABLE_DEPENDENCIES_VIOLATION);
-        }
-        return instabilityPerComponent;
+        return calculateInstability();
     }
 
     private Map<MavenProject, Double> calculateInstability() {
