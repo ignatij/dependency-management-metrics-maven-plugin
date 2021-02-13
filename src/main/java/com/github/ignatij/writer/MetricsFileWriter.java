@@ -1,9 +1,9 @@
-package writer;
+package com.github.ignatij.writer;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
-import statistic.Point;
-import statistic.StatisticUtil;
+import com.github.ignatij.statistic.Point;
+import com.github.ignatij.statistic.StatisticUtil;
 
 import java.io.File;
 import java.io.FileWriter;

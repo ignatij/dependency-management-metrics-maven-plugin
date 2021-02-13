@@ -1,4 +1,4 @@
-package stable_abstractions;
+package com.github.ignatij.stable_abstractions;
 
 import org.apache.maven.project.MavenProject;
 

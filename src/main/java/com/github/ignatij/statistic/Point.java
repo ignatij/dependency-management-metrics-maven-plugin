@@ -1,4 +1,4 @@
-package statistic;
+package com.github.ignatij.statistic;
 
 public class Point {
     private final String component;

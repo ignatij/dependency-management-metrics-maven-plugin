@@ -1,4 +1,4 @@
-package stable_dependencies;
+package com.github.ignatij.stable_dependencies;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
