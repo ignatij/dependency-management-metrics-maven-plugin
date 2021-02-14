@@ -18,13 +18,5 @@ jobs:
           JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
           release-branch-name: "main"
           access-token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
-          draft: false
-          prerelease: false
