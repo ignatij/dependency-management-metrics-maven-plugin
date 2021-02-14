@@ -26,10 +26,16 @@
         </repository>
     </distributionManagement>
 
+<!--    <scm>-->
+<!--        <url>https://github.com/ignatij/dependency-management-metrics-maven-plugin.git</url>-->
+<!--        <connection>scm:git:${project.scm.url}</connection>-->
+<!--        <developerConnection>scm:git:${project.scm.url}</developerConnection>-->
+<!--        <tag>HEAD</tag>-->
+<!--    </scm>-->
     <scm>
-        <url>https://github.com/ignatij/dependency-management-metrics-maven-plugin.git</url>
         <connection>scm:git:${project.scm.url}</connection>
         <developerConnection>scm:git:${project.scm.url}</developerConnection>
+        <url>git@github.com:ignatij/dependency-management-metrics-maven-plugin.git</url>
         <tag>HEAD</tag>
     </scm>
 
