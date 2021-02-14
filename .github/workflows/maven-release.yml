@@ -19,3 +19,4 @@ jobs:
         with:
           release-branch-name: "main"
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-passphrase: ${{ secrets.SSH_PASSPHRASE }}
