@@ -32,7 +32,7 @@
         <url>https://github.com/ignatij/dependency-management-metrics-maven-plugin.git</url>
         <connection>scm:git:${project.scm.url}</connection>
         <developerConnection>scm:git:${project.scm.url}</developerConnection>
-<!--        <tag>HEAD</tag>-->
+        <tag>HEAD</tag>
     </scm>
 
     <developers>
