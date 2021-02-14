@@ -9,8 +9,8 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+#      - name: Checkout code
+#        uses: actions/checkout@v2
       - name: Create Release
         id: create_release
         uses: qcastel/github-actions-maven-release@v1.0.3
