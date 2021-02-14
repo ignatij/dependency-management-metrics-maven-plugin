@@ -5,7 +5,8 @@
     <groupId>com.github.ignatij</groupId>
     <artifactId>dependency-management-metrics-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.1.2-SNAPSHOT</version>
+  
+    <version>1.0.3</version>
 
     <name>Dependency Management Metrics Maven Plugin</name>
     <url>http://maven.apache.org</url>
