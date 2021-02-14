@@ -11,9 +11,8 @@ jobs:
     steps:
 #      - name: Checkout code
 #        uses: actions/checkout@v2
-      - name: Create Release
-        id: create_release
-        uses: qcastel/github-actions-maven-release@v1.0.3
+      - name: Release
+        uses: qcastel/github-actions-maven-release@v1.12.8
         env:
           JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
