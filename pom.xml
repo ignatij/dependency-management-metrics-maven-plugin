@@ -118,14 +118,17 @@
                 </executions>
             </plugin>
             <plugin>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
+                <groupId>external.atlassian.jgitflow</groupId>
+                <artifactId>jgitflow-maven-plugin</artifactId>
+                <version>1.0-m5.1</version>
                 <configuration>
+                    <flowInitContext>
+                        <masterBranchName>main</masterBranchName>
+                        <developBranchName>develop</developBranchName>
+                    </flowInitContext>
                     <scmCommentPrefix>[ci skip]</scmCommentPrefix>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <useReleaseProfile>false</useReleaseProfile>
-                    <releaseProfiles>release</releaseProfiles>
-                    <goals>deploy</goals>
+                    <pullMaster>true</pullMaster>
+                    <pushReleases>true</pushReleases>
                 </configuration>
             </plugin>
             <plugin>
