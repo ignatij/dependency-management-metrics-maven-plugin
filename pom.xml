@@ -129,6 +129,8 @@
                     <scmCommentPrefix>[ci skip]</scmCommentPrefix>
                     <pullMaster>true</pullMaster>
                     <pushReleases>true</pushReleases>
+                    <username>${git.user}</username>
+                    <password>${git.password}</password>
                 </configuration>
             </plugin>
             <plugin>
