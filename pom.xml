@@ -125,6 +125,7 @@
                     <flowInitContext>
                         <masterBranchName>main</masterBranchName>
                         <developBranchName>develop</developBranchName>
+                        <versionTagPrefix>v.</versionTagPrefix>
                     </flowInitContext>
                     <scmCommentPrefix>[ci skip]</scmCommentPrefix>
                     <pullMaster>true</pullMaster>
