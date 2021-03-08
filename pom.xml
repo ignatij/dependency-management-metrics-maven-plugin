@@ -6,7 +6,7 @@
     <artifactId>dependency-management-metrics-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
   
-    <version>1.0.10-SNAPSHOT</version>
+    <version>1.0.12</version>
 
     <name>Dependency Management Metrics Maven Plugin</name>
     <description>Maven Plugin that outputs to a file the dependency management metrics</description>
@@ -118,14 +118,19 @@
                 </executions>
             </plugin>
             <plugin>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
+                <groupId>external.atlassian.jgitflow</groupId>
+                <artifactId>jgitflow-maven-plugin</artifactId>
+                <version>1.0-m5.1</version>
                 <configuration>
+                    <flowInitContext>
+                        <masterBranchName>main</masterBranchName>
+                        <developBranchName>develop</developBranchName>
+                    </flowInitContext>
                     <scmCommentPrefix>[ci skip]</scmCommentPrefix>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <useReleaseProfile>false</useReleaseProfile>
-                    <releaseProfiles>release</releaseProfiles>
-                    <goals>deploy</goals>
+                    <pullMaster>true</pullMaster>
+                    <pushReleases>true</pushReleases>
+                    <username>${git.user}</username>
+                    <password>${git.password}</password>
                 </configuration>
             </plugin>
             <plugin>
