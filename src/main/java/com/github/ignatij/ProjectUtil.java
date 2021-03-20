@@ -21,26 +21,36 @@ class ProjectUtil {
     private static final String POM_FILE_NAME = "pom.xml";
 
     static Map<MavenProject, List<String>> createProjectGraph(ProjectBuildingRequest buildingRequest,
-                                                                     ProjectBuilder projectBuilder,
-                                                                     MavenProject project) throws ProjectBuildingException {
-        Map<MavenProject, List<String>> projectGraph = new LinkedHashMap<>();
+                                                              ProjectBuilder projectBuilder,
+                                                              MavenProject project) throws ProjectBuildingException {
+        return createProjectGraph(new LinkedHashMap<>(), buildingRequest, projectBuilder, project);
+    }
+
+    static Map<MavenProject, List<String>> createProjectGraph(Map<MavenProject, List<String>> projectGraph,
+                                                              ProjectBuildingRequest buildingRequest,
+                                                              ProjectBuilder projectBuilder,
+                                                              MavenProject project) throws ProjectBuildingException {
         for (String module : project.getModules()) {
-            createProjectGraph(projectGraph, buildingRequest, projectBuilder, module, project.getBasedir());
+            buildingRequest.setProject(null);
+            File directory = getFile(new File(project.getBasedir().getAbsolutePath()), module);
+            File pomFile = getFile(directory, POM_FILE_NAME);
+            MavenProject mavenProject = projectBuilder.build(pomFile, buildingRequest)
+                    .getProject();
+            if (!mavenProject.getModules().isEmpty()) {
+                createProjectGraph(projectGraph, buildingRequest, projectBuilder, mavenProject);
+            } else {
+                createProjectGraphDependencies(projectGraph, buildingRequest, projectBuilder, mavenProject);
+            }
         }
         return projectGraph;
     }
 
-    private static Map<MavenProject, List<String>> createProjectGraph(Map<MavenProject, List<String>> projectGraph,
-                                                                      ProjectBuildingRequest buildingRequest,
-                                                                      ProjectBuilder projectBuilder,
-                                                                      String moduleName,
-                                                                      File baseDir
-    ) throws ProjectBuildingException {
+    private static Map<MavenProject, List<String>> createProjectGraphDependencies(Map<MavenProject, List<String>> projectGraph,
+                                                                                  ProjectBuildingRequest buildingRequest,
+                                                                                  ProjectBuilder projectBuilder,
+                                                                                  MavenProject mavenProject
+    ) {
         buildingRequest.setProject(null);
-        File directory = getFile(new File(baseDir.getAbsolutePath()), moduleName);
-        File pomFile = getFile(directory, POM_FILE_NAME);
-        MavenProject mavenProject = projectBuilder.build(pomFile, buildingRequest)
-                .getProject();
 
         if (projectGraph.containsKey(mavenProject)) {
             return projectGraph;
@@ -48,9 +58,15 @@ class ProjectUtil {
 
         List<String> projectDependencies = getProjectDependencies(mavenProject);
         projectGraph.put(mavenProject, projectDependencies);
-        for (String dependency : projectDependencies) {
-            return createProjectGraph(projectGraph, buildingRequest, projectBuilder, dependency, baseDir);
-        }
+//        for (String dependency : projectDependencies) {
+//            System.out.println("PATH: " + mavenProject.getBasedir().getAbsolutePath());
+//            System.out.println("DEPENDENCY: " + dependency);
+//            File directory = getFile(new File(mavenProject.getBasedir().getAbsolutePath()), dependency);
+//            File pomFile = getFile(directory, POM_FILE_NAME);
+//            MavenProject dependencyProject = projectBuilder.build(pomFile, buildingRequest)
+//                    .getProject();
+//            return createProjectGraphDependencies(projectGraph, buildingRequest, projectBuilder, dependencyProject);
+//        }
         return projectGraph;
     }
 
