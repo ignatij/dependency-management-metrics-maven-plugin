@@ -76,6 +76,31 @@ public class DependencyManagementMetricsMojoTest extends AbstractMojoTestCase {
         assertEquals("Component module4 is violating the stable dependencies principle", t.getMessage());
     }
 
+
+    /**
+     * A rather complex scenario of the following:
+     * Module1, Module2, Module3 are depending on Module4.
+     * Module4 is depending on Module5.
+     * Module5 depends on Module6, Module7, Module8.
+     * This is a clear violation of the stable dependencies principle, where a rather stable Module4 is dependent of
+     * much more unstable Module5.
+     *
+     * @throws Exception if any
+     */
+    public void testWeakDependenciesWithExceptionWithMultiModules()
+            throws Exception {
+        // given
+        String stableDependenciesPrincipleViolationProjectDir = "src/test/resources/weak-dependencies-weak-abstractions-with-exception-multi-module/";
+        DependencyManagementMetricsMojo myMojo = getMojo(stableDependenciesPrincipleViolationProjectDir);
+        assertNotNull(myMojo);
+
+        // when
+        Throwable t = assertThrows(StableDependenciesPrincipleViolation.class, myMojo::execute);
+
+        // then
+        assertEquals("Component module4 is violating the stable dependencies principle", t.getMessage());
+    }
+
     /**
      * A rather complex scenario of the following:
      * Module1, Module2, Module3 are depending on Module4.
