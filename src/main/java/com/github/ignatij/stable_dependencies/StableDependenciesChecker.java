@@ -1,6 +1,5 @@
 package com.github.ignatij.stable_dependencies;
 
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public class StableDependenciesChecker {
         this.projectGraph = projectGraph;
     }
 
-    public Map<MavenProject, Double> checkDependencies() throws MojoExecutionException {
+    public Map<MavenProject, Double> checkDependencies() {
         return calculateInstability();
     }
 
@@ -32,14 +31,18 @@ public class StableDependenciesChecker {
     }
 
     private Double calculateInstability(MavenProject mavenProject) {
-        long numberOfComponentsThatDependOnModule = projectGraph
+        long numberOfComponentsThatDependOnComponent = projectGraph
                 .values()
                 .stream()
-                .filter(dependencies -> dependencies.contains(mavenProject.getName()))
+                .filter(dependencies -> dependencies.contains(mavenProject.getArtifactId()))
                 .count();
-        long numberOfComponentsThatModuleDependsOn = projectGraph.get(mavenProject).size();
+        long numberOfComponentsThatComponentDependsOn = projectGraph.get(mavenProject).size();
+        if (numberOfComponentsThatComponentDependsOn == 0) {
+            // the component is not dependent on any other component, therefore minimum instability
+            return (double) 0;
+        }
 
-        return (double) numberOfComponentsThatModuleDependsOn / (numberOfComponentsThatDependOnModule + numberOfComponentsThatModuleDependsOn);
+        return (double) numberOfComponentsThatComponentDependsOn / (numberOfComponentsThatDependOnComponent + numberOfComponentsThatComponentDependsOn);
     }
 
 }

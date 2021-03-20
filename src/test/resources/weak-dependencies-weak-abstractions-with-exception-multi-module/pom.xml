@@ -11,9 +11,7 @@
 
     <modules>
         <module>module-of-modules</module>
-        <module>module3</module>
-        <module>module4</module>
-        <module>module5</module>
+        <module>another-module-of-modules</module>
         <module>module6</module>
         <module>module7</module>
         <module>module8</module>
