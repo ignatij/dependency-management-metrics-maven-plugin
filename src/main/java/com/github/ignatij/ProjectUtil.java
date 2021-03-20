@@ -24,7 +24,6 @@ class ProjectUtil {
                                                                      ProjectBuilder projectBuilder,
                                                                      MavenProject project) throws ProjectBuildingException {
         Map<MavenProject, List<String>> projectGraph = new LinkedHashMap<>();
-        System.out.println(project.getModules());
         for (String module : project.getModules()) {
             createProjectGraph(projectGraph, buildingRequest, projectBuilder, module, project.getBasedir());
         }
