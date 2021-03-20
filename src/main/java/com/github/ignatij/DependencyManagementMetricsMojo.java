@@ -70,15 +70,20 @@ public class DependencyManagementMetricsMojo extends AbstractMojo {
         try {
             if (!project.getModules().isEmpty()) {
                 final Map<MavenProject, List<String>> projectGraph = ProjectUtil.createProjectGraph(buildingRequest, projectBuilder, project);
+                getLog().info("Project graph defined: " + projectGraph);
                 final Map<MavenProject, Double> instabilityPerComponent = new StableDependenciesChecker(projectGraph).checkDependencies();
+                getLog().info("Instability per component calculated: " + instabilityPerComponent);
                 final Map<MavenProject, Double> abstractionPerComponent = new StableAbstractionsChecker(projectGraph).calculateAbstractionLevel();
+                getLog().info("Abstraction per component calculated: " + abstractionPerComponent);
 
                 List<Point> points = new ArrayList<>();
                 for (MavenProject project : projectGraph.keySet()) {
                     points.add(new Point(project.getName(), instabilityPerComponent.get(project), abstractionPerComponent.get(project)));
                 }
+                getLog().info("Writing to file: " + outputFile);
                 new MetricsFileWriter(getLog()).write(points, outputFile);
                 if (failOnViolation) {
+                    getLog().info("failOnViolation is ON");
                     new ViolationChecker(StableDependenciesPrincipleViolation.class).check(projectGraph, instabilityPerComponent, STABLE_DEPENDENCIES_VIOLATION);
                     new ViolationChecker(StableAbstractionsPrincipleViolation.class).check(projectGraph,
                             abstractionPerComponent,
