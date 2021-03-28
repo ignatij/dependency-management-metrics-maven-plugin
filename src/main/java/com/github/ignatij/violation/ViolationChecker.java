@@ -60,7 +60,7 @@ public class ViolationChecker {
     }
 
     private MavenProject getDependencyModule(List<MavenProject> modules, String dependency) {
-        return modules.stream().filter(module -> module.getName().equals(dependency)).findFirst().orElse(null);
+        return modules.stream().filter(module -> module.getArtifactId().equals(dependency)).findFirst().orElse(null);
     }
 
     private boolean isPrincipleViolated(MavenProject outerComponent,
