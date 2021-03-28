@@ -4,6 +4,8 @@
 
 Maven plugin that computes the Dependency Management Metrics for your multi-module Java projects.
 
+![Apache License, Version 2.0, January 2004](https://img.shields.io/github/license/apache/maven.svg?label=License)
+![Maven Central](https://img.shields.io/maven-central/v/com.github.ignatij/dependency-management-metrics-maven-plugin)
 ----
 
 ### Dependency Management Metrics
@@ -17,7 +19,9 @@ The metrics are consisted from two principles:
 <li>Stable Abstractions Principle</li>
 </ul>
 <p>
-In all explanations below the term <b>component</b> is actually meant as a <b>module</b> in the Java ecosystem.
+If you are already familiar with the theory part, feel free to skip to <b>Getting Started</b> part.
+
+In the text below, the granularity of the term <b>component</b> is the same as a <b>module</b> in the Java ecosystem.
 
 ### Stable Dependencies Principle
 
