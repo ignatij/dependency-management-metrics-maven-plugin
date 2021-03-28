@@ -1,9 +1,9 @@
 package com.github.ignatij.writer;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.logging.Log;
 import com.github.ignatij.statistic.Point;
 import com.github.ignatij.statistic.StatisticUtil;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.logging.Log;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -51,7 +51,7 @@ public class MetricsFileWriter implements MetricsWriter {
         }
         writer.write("\n\n");
         for (Point point : points) {
-            writer.write(String.format(OUTPUT_FORMAT, point.getComponent(), point.getX(), point.getY(), point.distance()));
+            writer.write(String.format(OUTPUT_FORMAT, point.getComponent().length() > 30 ? point.getComponent().substring(0, 30) : point.getComponent(), point.getX(), point.getY(), point.distance()));
         }
         writer.write("\n");
     }
@@ -62,14 +62,28 @@ public class MetricsFileWriter implements MetricsWriter {
         }
         header("ZONES OF EXCLUSION", writer);
         if (points.stream().anyMatch(Point::isInZoneOfPain)) {
-            writer.write("IN ZONE OF PAIN: " + points.stream().filter(Point::isInZoneOfPain).map(Point::getComponent).collect(Collectors.toList()));
-            writer.write("\n");
+            writer.write("ZONE OF PAIN: \n");
+            writeComponentsInZoneOfExclusion(writer, getComponentsInZoneOfPain(points));
         }
         if (points.stream().anyMatch(Point::isInZoneOfUselessness)) {
-            writer.write("IN ZONE OF USELESSNESS: " + points.stream().filter(Point::isInZoneOfUselessness).map(Point::getComponent).collect(Collectors.toList()));
-            writer.write("\n");
+            writer.write("ZONE OF USELESSNESS: \n");
+            writeComponentsInZoneOfExclusion(writer, getComponentsInZoneOfUselessness(points));
         }
         writer.write("\n");
+    }
+
+    private List<String> getComponentsInZoneOfPain(List<Point> points) {
+        return points.stream().filter(Point::isInZoneOfPain).map(Point::getComponent).collect(Collectors.toList());
+    }
+
+    private List<String> getComponentsInZoneOfUselessness(List<Point> points) {
+        return points.stream().filter(Point::isInZoneOfUselessness).map(Point::getComponent).collect(Collectors.toList());
+    }
+
+    private void writeComponentsInZoneOfExclusion(FileWriter writer, List<String> components) throws IOException {
+        for (String component : components) {
+            writer.write(component + "\n");
+        }
     }
 
     private void writeStatisticalAnalysis(List<Point> points, FileWriter writer) throws IOException {

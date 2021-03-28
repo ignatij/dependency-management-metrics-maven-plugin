@@ -34,9 +34,9 @@ import org.apache.maven.project.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.github.ignatij.stable_abstractions.StableAbstractionsChecker.STABLE_ABSTRACTIONS_VIOLATION;
 import static com.github.ignatij.stable_dependencies.StableDependenciesChecker.STABLE_DEPENDENCIES_VIOLATION;
@@ -65,30 +65,18 @@ public class DependencyManagementMetricsMojo extends AbstractMojo {
     @Component
     private ProjectBuilder projectBuilder;
 
+    private Map<MavenProject, List<String>> projectGraph;
+    private Map<MavenProject, Double> instabilityPerComponent;
+    private Map<MavenProject, Double> abstractionPerComponent;
+
+
     public void execute() throws MojoExecutionException {
-        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest(session.getProjectBuildingRequest());
         try {
             if (!project.getModules().isEmpty()) {
-                final Map<MavenProject, List<String>> projectGraph = ProjectUtil.createProjectGraph(buildingRequest, projectBuilder, project);
-                getLog().info("Project graph defined: " + projectGraph);
-                final Map<MavenProject, Double> instabilityPerComponent = new StableDependenciesChecker(projectGraph).checkDependencies();
-                getLog().info("Instability per component calculated: " + instabilityPerComponent);
-                final Map<MavenProject, Double> abstractionPerComponent = new StableAbstractionsChecker(projectGraph).calculateAbstractionLevel();
-                getLog().info("Abstraction per component calculated: " + abstractionPerComponent);
-
-                List<Point> points = new ArrayList<>();
-                for (MavenProject project : projectGraph.keySet()) {
-                    points.add(new Point(project.getName(), instabilityPerComponent.get(project), abstractionPerComponent.get(project)));
-                }
-                getLog().info("Writing to file: " + outputFile);
-                new MetricsFileWriter(getLog()).write(points, outputFile);
+                initProjectGraphAndCalculateMetrics();
+                writeMetricsToFile();
                 if (failOnViolation) {
-                    getLog().info("failOnViolation is ON");
-                    new ViolationChecker(StableDependenciesPrincipleViolation.class).check(projectGraph, instabilityPerComponent, STABLE_DEPENDENCIES_VIOLATION);
-                    new ViolationChecker(StableAbstractionsPrincipleViolation.class).check(projectGraph,
-                            abstractionPerComponent,
-                            STABLE_ABSTRACTIONS_VIOLATION
-                    );
+                    checkViolations();
                 }
             }
         } catch (ProjectBuildingException e) {
@@ -96,5 +84,35 @@ public class DependencyManagementMetricsMojo extends AbstractMojo {
         } catch (IOException e) {
             throw new MojoExecutionException("Error while reading the source files", e);
         }
+    }
+
+    private void initProjectGraphAndCalculateMetrics() throws ProjectBuildingException, IOException {
+        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest(session.getProjectBuildingRequest());
+        projectGraph = new ProjectGraphCreator(buildingRequest, projectBuilder).createProjectGraph(project);
+        instabilityPerComponent = new StableDependenciesChecker(projectGraph).checkDependencies();
+        abstractionPerComponent = new StableAbstractionsChecker(projectGraph).calculateAbstractionLevel();
+    }
+
+    private void writeMetricsToFile() throws MojoExecutionException, ProjectBuildingException, IOException {
+        new MetricsFileWriter(getLog()).write(getPoints(), outputFile);
+    }
+
+    private List<Point> getPoints() {
+        return projectGraph
+                .keySet()
+                .stream()
+                .map(project -> new Point(project.getName(), instabilityPerComponent.get(project), abstractionPerComponent.get(project)))
+                .collect(Collectors.toList());
+    }
+
+    private void checkViolations() throws MojoExecutionException {
+        getLog().info("Checking for violation in Stable Dependencies Principle");
+        new ViolationChecker(StableDependenciesPrincipleViolation.class).check(projectGraph, instabilityPerComponent, STABLE_DEPENDENCIES_VIOLATION);
+
+        getLog().info("Checking for violation in Stable Abstractions Principle");
+        new ViolationChecker(StableAbstractionsPrincipleViolation.class).check(projectGraph,
+                abstractionPerComponent,
+                STABLE_ABSTRACTIONS_VIOLATION
+        );
     }
 }
