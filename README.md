@@ -116,6 +116,7 @@ A component that sits on the <i>Main Sequence</i> is neither too abstract nor is
 ### Distance from <i>Main Sequence</i>
 
 How far away is a component from the <i>Main Sequence</i>:
+    
 ![Distance from Main Sequence](src/main/resources/assets/diagrams/distance.png)
 
 Any component that has a D metric value that's not near zero can be reexamined and restructured.
