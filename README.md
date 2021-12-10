@@ -90,6 +90,7 @@ Now we can define the <i>Stable Abstractions Principle</i> which states:
 
 Now that we have defined the two principles, we can define the relationship between the <i>Stability (I)</i>
 and <i>Abstractness (A)</i>:
+    
 ![main sequence](src/main/resources/assets/diagrams/main-sequence.png)
 
 If we draw a line between the (0, 1) and (1, 0) points, we get a line that's called the <i>Main Sequence</i> line:
