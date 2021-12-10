@@ -141,21 +141,36 @@ And finally the plugin can potentially break the build if any of the following p
 * Stable Dependencies Principle
 * Stable Abstractions Principle
 
-Add this to your parent pom.xml file:
+Add the following in your parent pom.xml file:
 
 ```xml
-
-<plugin>
-    <groupId>com.github.ignatij</groupId>
-    <artifactId>dependency-management-metrics-maven-plugin</artifactId>
-    <version>1.0.17</version>
-    <inherited>false</inherited>
-</plugin>
+<build>
+  <pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>com.github.ignatij</groupId>
+        <artifactId>dependency-management-metrics-maven-plugin</artifactId>
+        <version>1.0.17</version>
+      </plugin>
+    </plugins>
+  </pluginManagement>
+  <plugins>
+    <plugin>
+      <groupId>com.github.ignatij</groupId>
+      <artifactId>dependency-management-metrics-maven-plugin</artifactId>
+      <inherited>false</inherited>
+      <executions>
+        <execution>
+          <phase>verify</phase>
+          <goals>
+            <goal>check</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin></plugins>
+</build>
 ```
-
-If you want to potentially fail the build if any of the principles are violated add the <b>configuration tag the
-following</b>:
-
+If you want to potentially fail the build if any of the principles are violated, add the following <b>configuration</b> tag:
 ```xml
 <plugin>
     <groupId>com.github.ignatij</groupId>
