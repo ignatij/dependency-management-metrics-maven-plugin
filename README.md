@@ -182,7 +182,8 @@ If you want to potentially fail the build if any of the principles are violated,
     <inherited>false</inherited>
 </plugin>
 ```
-You can also customize the output file:
+By default, the output file is generated in the root **target** folder.
+But you can  customize that if needed:
 ``` xml
     ...
     <configuration>
